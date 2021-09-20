@@ -23,7 +23,7 @@ const App = () => {
   return (
     <div>
       <Header title={course} />
-      <Content index={parts} />
+      <Content array={parts} />
       <Total exercises={parts} />
     </div>
   )
