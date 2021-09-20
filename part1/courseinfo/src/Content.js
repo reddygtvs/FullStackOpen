@@ -1,7 +1,7 @@
 import React from 'react'
 import Part from './Part'
 const Content = (props) => {
-    const array = props.array;
+    const array = props.array.parts;
     return (
         <div>
             <Part names={array[0].name} numbers={array[0].exercises} />

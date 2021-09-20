@@ -1,5 +1,5 @@
 const Total = (props) => {
-    const number = props.exercises
+    const number = props.exercises.parts
     return (
         <div>
             <p>

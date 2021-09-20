@@ -1,7 +1,7 @@
-const Header = (course) => {
+const Header = (props) => {
     return (
         <div>
-            <h1>{course.title}</h1>
+            <h1>{props.title.name}</h1>
         </div>
     )
 }
