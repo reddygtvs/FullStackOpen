@@ -5,14 +5,16 @@ const Statistics = ({ good, neutral, bad }) => {
   
   if (good + neutral + bad > 0) {
     return (
-      <div>
-        <StatisticLine text='good' stats={good} />
-        <StatisticLine text='neutral' stats={neutral} />
-        <StatisticLine text='bad' stats={bad} />
-        <StatisticLine text='all' stats={good + neutral + bad} />
-        <StatisticLine text='average' stats={(good - bad) / (good + neutral + bad)} />
-        <StatisticLine text='positive' stats={100 * good / (good + neutral + bad) + ' %'} />
-      </div>
+      <table>
+        <tbody>
+          <StatisticLine text='good' stats={good} />
+          <StatisticLine text='neutral' stats={neutral} />
+          <StatisticLine text='bad' stats={bad} />
+          <StatisticLine text='all' stats={good + neutral + bad} />
+          <StatisticLine text='average' stats={(good - bad) / (good + neutral + bad)} />
+          <StatisticLine text='positive' stats={100 * good / (good + neutral + bad) + ' %'} />
+        </tbody>
+      </table>
     )
   } else {
     return (
@@ -30,7 +32,10 @@ const Button = ({ text, onClick }) => (
 )
 
 const StatisticLine = ({ text, stats }) => (
-  <p>{text} {stats}</p>
+  <tr>
+    <th>{text}</th>
+    <td>{stats}</td>
+  </tr>
 )
 
 const App = () => {
