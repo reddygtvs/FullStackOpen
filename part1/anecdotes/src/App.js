@@ -19,6 +19,12 @@ const App = () => {
   const addVote = () => {
     const copy = [...vote]
     copy[selected] += 1
+    if (copy[selected] > copy[mindex]) {
+      return (
+        setMindex(selected),
+        setVote(copy)
+      )
+    }
     return (
       setVote(copy)
     )
@@ -33,10 +39,15 @@ const App = () => {
 
   return (
     <div>
-      <h1>{anecdotes[selected]}</h1>
-      <p>{vote[selected]}</p>
+      <h1>Anecdote of the day</h1>
+      <p>{anecdotes[selected]}</p>
+      <p>has {vote[selected]} votes</p>
       <button onClick={addVote}>vote</button>
       <button onClick={randomQuote}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[mindex]}</p>
+      <p>has {vote[mindex]} votes</p>
+      
     </div>
   )
 }
