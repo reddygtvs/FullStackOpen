@@ -1,29 +1,30 @@
 import React, { useState } from 'react'
-import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react'
-
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', id: 'Arto Hellas' }
   ]) 
   const [ newName, setNewName ] = useState('')
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   const addNote = (event) => {
     event.preventDefault()
-    if (newName === '')
-      return
+    
     const noteObject = {
       name: newName,
-      id: persons.length + 1,
+      id: newName
+    }
+    setNewName('')
+    if (persons.find(person => person.name === noteObject.name)) {
+      window.alert(`${noteObject.name} is already added to phonebook`)
+      return
     }
 
     setPersons(persons.concat(noteObject))
-    setNewName('')
+    console.log(persons)
   }
 
   return (
