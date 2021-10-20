@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import Person from './Person'
+import PersonForm from './PersonForm'
+import Filter from './Filter'
 
 const App = () => {
-  // const [ persons, setPersons ] = useState([
-  //   { name: 'Arto Hellas', id: 'Arto Hellas', number:69696969 }
-  // ]) 
+  
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
@@ -50,46 +51,25 @@ const App = () => {
       window.alert(`${noteObject.name} is already added to phonebook`)
       return
     }
+    setNewNumber('')
 
     setPersons(persons.concat(noteObject))
     console.log(persons)
   }
-  // setPersons(() => persons.filter(el => el.name.toLowerCase().indexOf(filterName.toLowerCase !== -1)))
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        <div>
-          filter shown with: <input value={filterName}
-          onChange={handleFilterChange} />
-        </div>
-      </form>
+      {<Filter filterName={filterName} handleFilterChange={handleFilterChange} />}
       <h2>Add a new member</h2>
-      <form onSubmit={addNote}>
-        <div>
-          name: <input value={newName} 
-          onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input value={newNumber}
-          onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      {<PersonForm addNote={addNote} newName={newName} 
+      newNumber={newNumber} handleNameChange={handleNameChange} 
+      handleNumberChange={handleNumberChange}/>}
       
       {/* <div>debug: {newName}</div> */}
       <h2>Numbers</h2>
       <ul>
-        
-        {/* {filterItems(persons, filterName)} */}
-        {filterItems.map(person => {
-          return (
-            <li key={person.name}>{person.name} {person.number}</li>
-          )
-        })}
+        {filterItems.map(person =>  <Person person={person} />)}
       </ul>
     </div>
   )
