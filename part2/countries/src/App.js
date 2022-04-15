@@ -1,6 +1,4 @@
 
-
-import logo from './logo.svg';
 import './App.css';
 import React, {useState, useEffect } from 'react';
 import axios from 'axios';
@@ -11,11 +9,11 @@ const App = () => {
 
   const [countries, setCountries] = useState([])
   const [search, setSearch] = useState('')
-  const [list, setList] = useState([])
- 
+  const [tempa, setTempa] = useState([])
+
 
   const hook = () => {
-    console.log('effect') 
+    console.log('effect')
     axios.get('https://restcountries.com/v3.1/all').then(response => {
       console.log('fulfilled')
       setCountries(response.data)
@@ -23,7 +21,7 @@ const App = () => {
   }
 
   useEffect(hook, [])
-  
+
   const filtered =
     countries.filter(country => {
     return(country.name.common.toLowerCase().includes(search.toLowerCase()))
@@ -33,17 +31,27 @@ const App = () => {
     if(filtered.length > 10) {
       return(
         <div>Too many matches, specify another filter</div>
-      ) 
+      )
     } else if (filtered.length > 1 && filtered.length <= 10) {
       return(
         filtered.map((country) => {
         return (
-          <p key = {country.name.common}>
-            {country.name.common}
+          <div>
+            <p key = {country.name.common}>
+            {country.name.common} <button onClick={() => displayThis(country.tld[0])}>show</button>
           </p>
+          
+          <div>
+          {tempa.includes(country.tld[0]) && <Country country={country}/>}
+          </div>
+
+
+          </div>
+
+
         )
       }))
-    } else if (filtered.length === 1) {
+    } else if (filtered.length === 1 ) {
         return (
           <Country country={filtered[0]}/>
         )
@@ -51,7 +59,17 @@ const App = () => {
   }
 
 
-    
+  const displayThis = (country) => {
+    const display = tempa.slice()
+    console.log(tempa)
+    if(display.includes(country)) {
+      setTempa(display.filter(item => item !== country))
+    } else {
+      setTempa(display.concat(country))
+    }
+    console.log(tempa)
+  }
+
 
 
   return (
@@ -62,7 +80,7 @@ const App = () => {
       <div>
         {output()}
       </div>
-      
+
 
     </div>
   )
