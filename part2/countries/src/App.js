@@ -11,11 +11,12 @@ const App = () => {
   const [search, setSearch] = useState('')
   const [tempa, setTempa] = useState([])
 
-
+  const api_key = process.env.REACT_APP_API_KEY
   const hook = () => {
     console.log('effect')
     axios.get('https://restcountries.com/v3.1/all').then(response => {
       console.log('fulfilled')
+      console.log(process.env.REACT_APP_API_KEY)
       setCountries(response.data)
     })
   }
