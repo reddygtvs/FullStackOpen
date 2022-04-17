@@ -47,18 +47,24 @@ const App = () => {
     
     const noteObject = {
       name: newName,
-      id: newName,
+      // id: newName,
       number: newNumber
     }
-    setNewName('')
+    
     if (persons.find(person => person.name === noteObject.name)) {
       window.alert(`${noteObject.name} is already added to phonebook`)
       return
     }
-    setNewNumber('')
+    axios.post('http://localhost:3001/persons', noteObject).then(response => {
+      console.log(response)
+      setPersons(persons.concat(response.data))
+      setNewName('')
+      setNewNumber('')
+    })
+    
 
-    setPersons(persons.concat(noteObject))
-    console.log(persons)
+    // setPersons(persons.concat(noteObject))
+    
   }
 
   return (
