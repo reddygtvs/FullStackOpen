@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import Person from './Person'
 import PersonForm from './PersonForm'
 import Filter from './Filter'
-import axios from 'axios'
 import personService from './services/persons'
 
 const App = () => {
@@ -20,7 +19,7 @@ const App = () => {
     console.log('start')
       personService.getAll().then(response => {
         console.log('fulfilled')
-        console.log(response)
+        // console.log(response)
         setPersons(response)
       })
   }
@@ -67,10 +66,19 @@ const App = () => {
     // setPersons(persons.concat(noteObject))
     
   }
+  const removeEntry = (id, nameCurrent) => {
+    if (window.confirm(`Do you really want to delete ${nameCurrent}?`)) {
+      personService.remove(id).then(response => {
+        console.log(response)
+        setPersons(persons.filter(person => person.id !== id))
+        console.log(setPersons)
+      })
+    }
+  }
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
       {<Filter filterName={filterName} handleFilterChange={handleFilterChange} />}
       <h2>Add a new member</h2>
       {<PersonForm addNote={addNote} newName={newName} 
@@ -78,10 +86,16 @@ const App = () => {
       handleNumberChange={handleNumberChange}/>}
       
       {/* <div>debug: {newName}</div> */}
-      <h2>Numbers</h2>
-      <ul>
-        {filterItems.map(person =>  <Person person={person} />)}
-      </ul>
+      <h1>Numbers</h1>
+      
+        {filterItems.map(person =>
+           
+              <div>
+                <Person person={person} />
+                <button onClick={() => removeEntry(person.id, person.name)}>delete</button>
+              </div>
+            
+            )}
     </div>
   )
 }
