@@ -52,7 +52,16 @@ const App = () => {
     }
     
     if (persons.find(person => person.name === noteObject.name)) {
-      window.alert(`${noteObject.name} is already added to phonebook`)
+      const note = persons.find(person => person.name === noteObject.name)
+      if (window.confirm(`${noteObject.name} is already added to phonebook. Do you want to update the number?`)) {
+        personService.update(note.id, noteObject).then(response => {
+          console.log(response)
+          setPersons(persons.map(person => person.id !== response.id? person : response))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+
       return
     }
    personService.create(noteObject).then(response => {
