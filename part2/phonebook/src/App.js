@@ -3,6 +3,7 @@ import Person from './Person'
 import PersonForm from './PersonForm'
 import Filter from './Filter'
 import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   
@@ -17,10 +18,10 @@ const App = () => {
   }
   const fet = () => {
     console.log('start')
-      axios.get('http://localhost:3001/persons').then(response => {
+      personService.getAll().then(response => {
         console.log('fulfilled')
-        console.log(response.data)
-        setPersons(response.data)
+        console.log(response)
+        setPersons(response)
       })
   }
 
@@ -55,9 +56,9 @@ const App = () => {
       window.alert(`${noteObject.name} is already added to phonebook`)
       return
     }
-    axios.post('http://localhost:3001/persons', noteObject).then(response => {
+   personService.create(noteObject).then(response => {
       console.log(response)
-      setPersons(persons.concat(response.data))
+      setPersons(persons.concat(response))
       setNewName('')
       setNewNumber('')
     })
