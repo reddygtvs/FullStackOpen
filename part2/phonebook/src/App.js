@@ -13,6 +13,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterName, setFilterName ] = useState('')
   const [ message, setMessage ] = useState(null)
+  const [tip, setTip ] = useState('confirm')
   
 
   const handleNameChange = (event) => {
@@ -61,6 +62,7 @@ const App = () => {
           console.log(response)
           setPersons(persons.map(person => person.id !== response.id? person : response))
           setMessage(`Number for ${note.name} has been updated`)
+          setTip('confirm')
           setNewName('')
           setNewNumber('')
           setTimeout(() => {
@@ -76,6 +78,7 @@ const App = () => {
       console.log(response)
       setPersons(persons.concat(response))
       setMessage(`${response.name} has been added`)
+      setTip('confirm')
       setNewName('')
       setNewNumber('')
       setTimeout(() => {
@@ -93,6 +96,19 @@ const App = () => {
         console.log(response)
         setPersons(persons.filter(person => person.id !== id))
         console.log(setPersons)
+        setMessage(`${nameCurrent} has been removed from the server`)
+        setTip('confirm')
+        setTimeout(() => {
+        setMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setMessage(`${nameCurrent} has already been removed from the server`)
+          setTip('error')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        setPersons(persons.filter(person => person.id !== id))
       })
     }
   }
@@ -100,7 +116,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification message={message} tip={tip}/>
       {<Filter filterName={filterName} handleFilterChange={handleFilterChange} />}
 
       <h2>Add a new member</h2>

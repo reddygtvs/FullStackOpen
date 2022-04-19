@@ -1,10 +1,10 @@
 import './App.css'
-const Notification = ( {message} ) => {
+const Notification = ( {message, tip} ) => {
     if (message === null)  {
         return null
     }
     return (
-        <div className="confirm">
+        <div className={tip}>
             {message}
         </div>
     )
