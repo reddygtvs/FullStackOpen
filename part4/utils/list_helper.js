@@ -11,10 +11,6 @@ const totalLikes = (blogs) => {
 
 const favoriteBlog = (blogs) => {
   const reducer = (maximum, item) => {
-    console.log(maximum);
-    console.log(item);
-    console.log("----------------------");
-    //item.likes > maximum.likes ? item : maximum;
     if (item.likes > maximum.likes) {
       return item;
     } else {
@@ -24,8 +20,30 @@ const favoriteBlog = (blogs) => {
   return blogs.reduce(reducer, blogs[0]);
 };
 
+const mostBlogs = (blogs) => {
+  let blogHash = new Map();
+  const reducer = (most, item) => {
+    if (most.title === "none") {
+      blogHash.set(item.author, 1);
+      return item;
+    }
+    if (!blogHash.has(item.author)) {
+      blogHash.set(item.author, 1);
+    } else {
+      blogHash.set(item.author, blogHash.get(item.author) + 1);
+    }
+    if (blogHash.get(most.author) < blogHash.get(item.author)) {
+      return item;
+    } else {
+      return most;
+    }
+  };
+  return blogs.reduce(reducer, { title: "none" });
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };
