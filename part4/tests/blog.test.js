@@ -115,3 +115,16 @@ describe("Which author has the maximum blogs", () => {
     expect(result.author).toBe("Edsger W. Dijkstra");
   });
 });
+
+describe("Which author has the maximum Likes", () => {
+  test("of large list is accurate ", () => {
+    const result = listHelper.mostLikes(manyBlogs);
+    expect(result.author).toBe("Edsger W. Dijkstra");
+  });
+
+  test("when list has only one blog, equals the likes of that", () => {
+    const result = listHelper.mostLikes(listWithOneBlog);
+    //console.log(result);
+    expect(result.author).toBe("Edsger W. Dijkstra");
+  });
+});

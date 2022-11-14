@@ -41,9 +41,30 @@ const mostBlogs = (blogs) => {
   return blogs.reduce(reducer, { title: "none" });
 };
 
+const mostLikes = (blogs) => {
+  let blogHash = new Map();
+  const reducer = (most, item) => {
+    if (most.title === "none") {
+      blogHash.set(item.author, item.likes);
+      return item;
+    }
+    if (!blogHash.has(item.author)) {
+      blogHash.set(item.author, item.likes);
+    } else {
+      blogHash.set(item.author, blogHash.get(item.author) + item.likes);
+    }
+    if (blogHash.get(most.author) < blogHash.get(item.author)) {
+      return item;
+    } else {
+      return most;
+    }
+  };
+  return blogs.reduce(reducer, { title: "none" });
+};
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
