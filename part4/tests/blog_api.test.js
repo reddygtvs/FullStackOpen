@@ -37,6 +37,17 @@ test("HTTP Post request adds a new blog", async () => {
   expect(response.body).toHaveLength(index + 1);
   expect(response.body[index].title).toEqual(newBlog.title);
 });
+test("HTTP Post request sets likes to 0 if likes is not defined", async () => {
+  const newBlog = {
+    title: "Test Blog",
+    author: "test author",
+    url: "testurl.com",
+  };
+  await api.post("/api/blogs").send(newBlog);
+  const response = await api.get("/api/blogs");
+  const index = initialBlogs.length;
+  expect(response.body[index].likes).toEqual(0);
+});
 beforeEach(async () => {
   await Blog.deleteMany({});
   for (let blog of initialBlogs) {
