@@ -20,18 +20,10 @@ test("all blogs are returned", async () => {
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-  let blogObject = new Blog(initialBlogs[0]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[1]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[2]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[3]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[4]);
-  await blogObject.save();
-  blogObject = new Blog(initialBlogs[5]);
-  await blogObject.save();
+  for (let blog of initialBlogs) {
+    let blogObject = new Blog(blog);
+    await blogObject.save();
+  }
 });
 
 afterAll(async () => {
