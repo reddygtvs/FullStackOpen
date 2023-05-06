@@ -23,12 +23,28 @@ test("id is defined for each blogObject", async () => {
   expect(response.body[0].id).toBeDefined();
 }, 10000);
 
+test("HTTP Post request adds a new blog", async () => {
+  const newBlog = {
+    title: "Test Blog",
+    author: "Test Author",
+    url: "testurl.com",
+    likes: 0,
+  };
+
+  await api.post("/api/blogs").send(newBlog);
+  const response = await api.get("/api/blogs");
+  const index = initialBlogs.length;
+  expect(response.body).toHaveLength(index + 1);
+  expect(response.body[index].title).toEqual(newBlog.title);
+});
 beforeEach(async () => {
   await Blog.deleteMany({});
   for (let blog of initialBlogs) {
     let blogObject = new Blog(blog);
     await blogObject.save();
   }
+  //   const response = await api.get("/api/blogs");
+  //   initialBlogs = response.body;
 });
 
 afterAll(async () => {
