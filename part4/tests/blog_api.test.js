@@ -68,6 +68,20 @@ describe("deletion of a blog", () => {
   });
 });
 
+describe("updating a blog", () => {
+  test("HTTP Put request updates a blog", async () => {
+    const response = await api.get("/api/blogs");
+    const index = initialBlogs.length;
+    const id = response.body[index - 1].id;
+    const updatedBlog = {
+      likes: 100,
+    };
+    await api.put(`/api/blogs/${id}`).send(updatedBlog).expect(200);
+    const response2 = await api.get("/api/blogs");
+    expect(response2.body[index - 1].likes).toEqual(100);
+  });
+});
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   for (let blog of initialBlogs) {
