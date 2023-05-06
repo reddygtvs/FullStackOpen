@@ -18,6 +18,11 @@ test("all blogs are returned", async () => {
   expect(response.body).toHaveLength(initialBlogs.length);
 }, 10000);
 
+test("id is defined for each blogObject", async () => {
+  const response = await api.get("/api/blogs");
+  expect(response.body[0].id).toBeDefined();
+}, 10000);
+
 beforeEach(async () => {
   await Blog.deleteMany({});
   for (let blog of initialBlogs) {
