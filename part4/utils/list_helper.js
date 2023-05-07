@@ -126,4 +126,5 @@ module.exports = {
   mostBlogs,
   mostLikes,
   initialBlogs,
+  usersInDb,
 };

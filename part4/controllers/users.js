@@ -6,7 +6,13 @@ usersRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
-
+  //   if (username.exists) {
+  //     return response.status(400).json({ error: "username must be unique" });
+  //   }
+  const doesUserExist = await User.exists({ username });
+  if (doesUserExist) {
+    return response.status(400).json({ error: "`username` to be unique" });
+  }
   const user = new User({
     username,
     name,
@@ -15,6 +21,11 @@ usersRouter.post("/", async (request, response) => {
 
   const savedUser = await user.save();
   response.status(201).json(savedUser);
+});
+
+usersRouter.get("/", async (request, response) => {
+  const users = await User.find({});
+  response.json(users);
 });
 
 module.exports = usersRouter;
