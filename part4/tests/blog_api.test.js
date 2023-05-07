@@ -49,6 +49,22 @@ describe("when there is initially one user in db", () => {
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
+  test("creation fails with proper statuscode/message if username/password is < 3 characters", async () => {
+    const usersAtStart = await helper.usersInDb();
+    const newUser = {
+      username: "ro",
+      name: "Superuser",
+      password: "sa",
+    };
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+    expect(result.body.error).toContain(
+      "'username' and 'password' must be at least 3 characters long"
+    );
+  });
 });
 
 describe("when there is initially some blogs saved", () => {
