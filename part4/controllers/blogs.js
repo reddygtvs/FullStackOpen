@@ -2,6 +2,7 @@ const blogsRouter = require("express").Router();
 const Blog = require("../models/Blog");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const userExtractor = require("../utils/middleware").userExtractor;
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", {
@@ -11,14 +12,13 @@ blogsRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
-blogsRouter.post("/", async (request, response) => {
-  // const blog = new Blog(request.body);
+blogsRouter.post("/", userExtractor, async (request, response) => {
   const blog = request.body;
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    response.status(401).json({ error: "token missing or invalid" });
-  }
-  const user = await User.findById(decodedToken.id);
+  // const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  // if (!decodedToken.id) {
+  //   response.status(401).json({ error: "token missing or invalid" });
+  // }
+  const user = await User.findById(request.user);
   // const user = await User.findById(blog.userId);
   if (!blog.title || !blog.url) {
     return response.status(400).end();
@@ -37,14 +37,14 @@ blogsRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
-blogsRouter.delete("/:id", async (request, response) => {
+blogsRouter.delete("/:id", userExtractor, async (request, response) => {
   const id = request.params.id;
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    response.status(401).json({ error: "token missing or invalid" });
-  }
+  // const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  // if (!decodedToken.id) {
+  //   response.status(401).json({ error: "token missing or invalid" });
+  // }
   const blog = await Blog.findById(id);
-  if (blog.user.toString() !== decodedToken.id.toString()) {
+  if (blog.user.toString() !== request.user.toString()) {
     return response.status(401).json({ error: "invalid token" });
   }
   await Blog.findByIdAndRemove(id);
