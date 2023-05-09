@@ -86,6 +86,30 @@ describe("when there is initially some blogs saved", () => {
   }, 10000);
 });
 describe("addition of a new blog", () => {
+  test("login succeeds with correct credentials", async () => {
+    const result = await api
+      .post("/api/login")
+      .send({ username: "root", password: "sekret" })
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+    expect(result.body.token).toBeDefined();
+  });
+
+  let token;
+  beforeAll(async () => {
+    await User.deleteMany({});
+    const user = {
+      username: "root",
+      name: "root",
+      password: "sekret",
+    };
+    await api.post("/api/users").send(user);
+    const result = await api
+      .post("/api/login")
+      .send({ username: "root", password: "sekret" });
+
+    token = { Authorization: `Bearer ${result.body.token}` };
+  });
   test("HTTP Post request adds a new blog", async () => {
     const newBlog = {
       title: "Test Blog",
@@ -94,7 +118,7 @@ describe("addition of a new blog", () => {
       likes: 0,
     };
 
-    await api.post("/api/blogs").send(newBlog);
+    await api.post("/api/blogs").set(token).send(newBlog).expect(201);
     const response = await api.get("/api/blogs");
     const index = initialBlogs.length;
     expect(response.body).toHaveLength(index + 1);
@@ -107,7 +131,7 @@ describe("addition of a new blog", () => {
       author: "test author",
       url: "testurl.com",
     };
-    await api.post("/api/blogs").send(newBlog);
+    await api.post("/api/blogs").set(token).send(newBlog);
     const response = await api.get("/api/blogs");
     const index = initialBlogs.length;
     expect(response.body[index].likes).toEqual(0);
@@ -119,13 +143,34 @@ describe("addition of a new blog", () => {
   });
 });
 describe("deletion of a blog", () => {
+  let token;
+  beforeAll(async () => {
+    await User.deleteMany({});
+    const user = {
+      username: "root",
+      name: "root",
+      password: "sekret",
+    };
+    await api.post("/api/users").send(user);
+    const result = await api
+      .post("/api/login")
+      .send({ username: "root", password: "sekret" });
+
+    token = { Authorization: `Bearer ${result.body.token}` };
+  });
   test("HTTP Delete request deletes a blog", async () => {
+    const newBlog = {
+      title: "Test Blog",
+      author: "test author",
+      url: "testurl.com",
+    };
+    await api.post("/api/blogs").set(token).send(newBlog);
     const response = await api.get("/api/blogs");
     const index = initialBlogs.length;
-    const id = response.body[index - 1].id;
-    await api.delete(`/api/blogs/${id}`).expect(204);
+    const id = response.body[index].id;
+    await api.delete(`/api/blogs/${id}`).set(token).expect(204);
     const response2 = await api.get("/api/blogs");
-    expect(response2.body).toHaveLength(index - 1);
+    expect(response2.body).toHaveLength(index);
   });
 });
 
