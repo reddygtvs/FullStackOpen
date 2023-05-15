@@ -81,7 +81,7 @@ const App = () => {
             setMessage(null);
           }, 5000);
         })
-        .catch((error) => {
+        .catch(() => {
           setMessage("Failed to delete the blog. Please try again later.");
           setTimeout(() => {
             setMessage(null);
@@ -134,7 +134,7 @@ const App = () => {
       </Togglable>
 
       {blogs.map((blog) => (
-        <div className="Blog">
+        <div className="Blog" key={blog.id}>
           <Blog key={blog.id} blog={blog} />
           <Togglable
             buttonLabel="view"
