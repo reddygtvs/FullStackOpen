@@ -5,6 +5,8 @@ import loginService from "./services/login";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
+import BlogExpanded from "./components/BlogExpanded";
+import "./App.css";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -27,15 +29,21 @@ const App = () => {
   }, []);
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility();
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog));
-      setMessage(
-        `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`
-      );
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    });
+    blogService
+      .create(blogObject)
+      .then((returnedBlog) => {
+        setBlogs(blogs.concat(returnedBlog));
+        setMessage(
+          `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`
+        );
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        setMessage("Failed to add the blog. Please try again later.");
+        console.error("Error adding blog:", error);
+      });
   };
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -69,16 +77,30 @@ const App = () => {
   };
 
   const blogForm = () => (
-    <div>
+    <div className="home">
       <h2>Blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <Togglable
+        buttonLabel="new blog"
+        buttonHideLabel="cancel"
+        ref={blogFormRef}
+      >
         <BlogForm createBlog={addBlog} />
       </Togglable>
+
+      {blogs.map((blog) => (
+        <div className="Blog">
+          <Blog key={blog.id} blog={blog} />
+          <Togglable
+            buttonLabel="view"
+            buttonHideLabel="hide"
+            ref={blogFormRef}
+          >
+            <BlogExpanded blog={blog} />
+          </Togglable>
+        </div>
+      ))}
     </div>
   );
 
