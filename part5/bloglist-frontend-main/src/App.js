@@ -16,9 +16,7 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
-  // useEffect(() => {
-  //   blogService.getAll().then((blogs) => setBlogs(blogs.sort()));
-  // }, []);
+
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
@@ -56,7 +54,6 @@ const App = () => {
     blogService
       .update(id, blogObject)
       .then((returnedBlog) => {
-        console.log("Successfully updated blog");
         setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
         setMessage(`Blog ${blogObject.title} by ${blogObject.author} updated`);
         setTimeout(() => {
