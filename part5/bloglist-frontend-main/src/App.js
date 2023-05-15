@@ -126,7 +126,7 @@ const App = () => {
       <h2>Blogs</h2>
 
       <Togglable
-        buttonLabel="new blog"
+        buttonLabel="New blog"
         buttonHideLabel="cancel"
         ref={blogFormRef}
       >
