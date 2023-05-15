@@ -132,12 +132,7 @@ const App = () => {
       setPassword={setPassword}
     />
   );
-  const Logout = () => {
-    <div>
-      <p>{user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
-    </div>;
-  };
+
   return (
     <div>
       <Notification message={message} />
