@@ -17,6 +17,7 @@ const App = () => {
   const blogFormRef = useRef();
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
+    console.log(blogs);
   }, []);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const App = () => {
       .create(blogObject)
       .then((returnedBlog) => {
         setBlogs(blogs.concat(returnedBlog));
+        console.log(returnedBlog);
         setMessage(
           `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`
         );
