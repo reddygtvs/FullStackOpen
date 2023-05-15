@@ -30,6 +30,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       blogService.setToken(user.token);
+      console.log(user);
     }
   }, []);
   const addBlog = (blogObject) => {
@@ -118,6 +119,8 @@ const App = () => {
           >
             <BlogExpanded handleUpdate={updateBlog} blog={blog} />
           </Togglable>
+
+          {user && user.name === blog.user.name && <button>remove</button>}
         </div>
       ))}
     </div>
