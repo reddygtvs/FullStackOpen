@@ -6,6 +6,7 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import BlogExpanded from "./components/BlogExpanded";
+import LoginForm from "./components/LoginForm";
 import "./App.css";
 
 const App = () => {
@@ -107,30 +108,13 @@ const App = () => {
   );
 
   const loginForm = () => (
-    <div>
-      <h2>Log in to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
+    <LoginForm
+      handleSubmit={handleLogin}
+      username={username}
+      password={password}
+      setUsername={setUsername}
+      setPassword={setPassword}
+    />
   );
   return (
     <div>
