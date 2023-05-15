@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -18,7 +18,6 @@ const App = () => {
   const blogFormRef = useRef();
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
-    console.log(blogs);
   }, []);
 
   useEffect(() => {
@@ -35,7 +34,6 @@ const App = () => {
       .create(blogObject)
       .then((returnedBlog) => {
         setBlogs(blogs.concat(returnedBlog));
-        console.log(returnedBlog);
         setMessage(
           `A new blog ${returnedBlog.title} by ${returnedBlog.author} added`
         );
@@ -48,6 +46,22 @@ const App = () => {
         console.error("Error adding blog:", error);
       });
   };
+  const updateBlog = (id, blogObject) => {
+    blogService
+      .update(id, blogObject)
+      .then((returnedBlog) => {
+        console.log("Successfully updated blog");
+        setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
+        setMessage(`Blog ${blogObject.title} by ${blogObject.author} updated`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        setMessage("Failed to update the blog. Please try again later.");
+        console.error("Error updating blog:", error);
+      });
+  };
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -58,7 +72,7 @@ const App = () => {
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      console.log(user);
+
       setUsername("");
       setPassword("");
       setMessage(`${user.name}, welcome! You're now logged in`);
@@ -98,9 +112,9 @@ const App = () => {
           <Togglable
             buttonLabel="view"
             buttonHideLabel="hide"
-            ref={blogFormRef}
+            ref={createRef()}
           >
-            <BlogExpanded blog={blog} />
+            <BlogExpanded handleUpdate={updateBlog} blog={blog} />
           </Togglable>
         </div>
       ))}
