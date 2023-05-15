@@ -16,8 +16,14 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
+  // useEffect(() => {
+  //   blogService.getAll().then((blogs) => setBlogs(blogs.sort()));
+  // }, []);
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs);
+    });
   }, []);
 
   useEffect(() => {
