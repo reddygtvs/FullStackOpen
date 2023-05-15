@@ -10,9 +10,6 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
@@ -70,30 +67,7 @@ const App = () => {
     window.localStorage.clear();
     setUser(null);
   };
-  const handleCreate = async (event) => {
-    event.preventDefault();
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url,
-    };
-    try {
-      const blog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(blog));
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-      setMessage(`a new blog ${blog.title} by ${blog.author} added`);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    } catch (exception) {
-      setMessage("Wrong details");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    }
-  };
+
   const blogForm = () => (
     <div>
       <h2>Blogs</h2>
@@ -105,39 +79,6 @@ const App = () => {
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
-      {/* <div>
-        <h2>create new</h2>
-        <form onSubmit={handleCreate}>
-          <div>
-            title:
-            <input
-              type="text"
-              value={title}
-              name="Title"
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </div>
-          <div>
-            author:
-            <input
-              type="text"
-              value={author}
-              name="Author"
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
-            url:
-            <input
-              type="text"
-              value={url}
-              name="Url"
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </div>
-          <button type="submit">create</button>
-        </form>
-      </div> */}
     </div>
   );
 
