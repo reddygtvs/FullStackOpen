@@ -30,7 +30,6 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
       blogService.setToken(user.token);
-      console.log(user);
     }
   }, []);
   const addBlog = (blogObject) => {
@@ -66,6 +65,31 @@ const App = () => {
         console.error("Error updating blog:", error);
       });
   };
+
+  const deleteBlog = (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this blog?"
+    );
+
+    if (confirmed) {
+      blogService
+        .deleteBlog(id)
+        .then(() => {
+          setBlogs(blogs.filter((blog) => blog.id !== id));
+          setMessage("Blog deleted");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setMessage("Failed to delete the blog. Please try again later.");
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        });
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -120,7 +144,9 @@ const App = () => {
             <BlogExpanded handleUpdate={updateBlog} blog={blog} />
           </Togglable>
 
-          {user && user.name === blog.user.name && <button>remove</button>}
+          {user && user.name === blog.user.name && (
+            <button onClick={() => deleteBlog(blog.id)}>remove</button>
+          )}
         </div>
       ))}
     </div>
