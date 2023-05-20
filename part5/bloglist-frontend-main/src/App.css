@@ -8,7 +8,9 @@
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
+  margin: 10px;
 }
+
 .Blog {
   display: block;
   width: max-content;
