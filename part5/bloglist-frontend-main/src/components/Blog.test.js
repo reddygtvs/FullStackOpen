@@ -49,4 +49,27 @@ describe("Blog", () => {
     expect(component.container).toHaveTextContent("Blog User");
     expect(component.container).toHaveTextContent("Blog User Name");
   });
+  test("ensures like button is clicked twice", () => {
+    const mockHandler = jest.fn();
+    const component = render(
+      <div className="Blog" key={blog.id}>
+        <Blog key={blog.id} blog={blog} />
+        <Togglable buttonLabel="view" buttonHideLabel="hide">
+          <BlogExpanded handleUpdate={mockHandler} blog={blog} />
+        </Togglable>
+      </div>
+    );
+    const button = component.getByText("view");
+    act(() => {
+      button.click();
+    });
+    const likeButton = component.getByText("Like");
+    act(() => {
+      likeButton.click();
+    });
+    act(() => {
+      likeButton.click();
+    });
+    expect(mockHandler.mock.calls).toHaveLength(2);
+  });
 });
