@@ -1,10 +1,12 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 import Blog from "./Blog";
 import Togglable from "./Togglable";
 import BlogExpanded from "./BlogExpanded";
+import BlogForm from "./BlogForm";
+import userEvent from "@testing-library/user-event";
 
 describe("Blog", () => {
   const blog = {
@@ -71,5 +73,23 @@ describe("Blog", () => {
       likeButton.click();
     });
     expect(mockHandler.mock.calls).toHaveLength(2);
+  });
+  test("<BlogForm > calls event handler with right details when blog is creatd", () => {
+    const createBlog = jest.fn();
+    const component = render(<BlogForm createBlog={createBlog} />);
+    const title = screen.getByPlaceholderText("Blog Title");
+    const author = screen.getByPlaceholderText("Blog Author");
+    const url = screen.getByPlaceholderText("Blog URL");
+
+    const submitButton = component.getByText("create");
+    userEvent.type(title, "Blog Title");
+    userEvent.type(author, "Blog Author");
+    userEvent.type(url, "Blog URL");
+    userEvent.click(submitButton);
+
+    expect(createBlog.mock.calls).toHaveLength(1);
+    expect(createBlog.mock.calls[0][0].title).toBe("Blog Title");
+    expect(createBlog.mock.calls[0][0].author).toBe("Blog Author");
+    expect(createBlog.mock.calls[0][0].url).toBe("Blog URL");
   });
 });
