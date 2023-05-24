@@ -28,4 +28,19 @@ describe("Blog app", function () {
       cy.contains("Wrong username or password");
     });
   });
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.get("#username").type("root");
+      cy.get("#password").type("sekret");
+      cy.get("#login-button").click();
+    });
+    it("A blog can be created", function () {
+      cy.contains("New blog").click();
+      cy.get("#title").type("Test Blog");
+      cy.get("#author").type("Test Author");
+      cy.get("#url").type("Test URL");
+      cy.get("#create-button").click();
+      cy.contains("Test Blog");
+    });
+  });
 });
