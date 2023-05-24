@@ -144,7 +144,7 @@ const App = () => {
             <BlogExpanded handleUpdate={updateBlog} blog={blog} />
           </Togglable>
 
-          {user && user.name === blog.user.name && (
+          {user && blog.user && user.name === blog.user.name && (
             <button onClick={() => deleteBlog(blog.id)}>remove</button>
           )}
         </div>
@@ -164,6 +164,7 @@ const App = () => {
 
   return (
     <div>
+      <h1>Blog App</h1>
       <Notification message={message} />
       {user === null ? (
         loginForm()

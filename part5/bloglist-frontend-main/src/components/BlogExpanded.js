@@ -21,7 +21,7 @@ const BlogExpanded = ({ blog, handleUpdate }) => {
       <div>
         likes: {blog.likes} <button onClick={update}>Like</button>
       </div>
-      <div>{blog.user.name}</div>
+      {blog.user && <div>author: {blog.user.name}</div>}
     </div>
   );
 };
