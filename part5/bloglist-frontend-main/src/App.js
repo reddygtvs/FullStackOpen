@@ -116,6 +116,7 @@ const App = () => {
       }, 5000);
     }
   };
+
   const handleLogout = () => {
     window.localStorage.clear();
     setUser(null);
